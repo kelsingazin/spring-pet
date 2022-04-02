@@ -1,6 +1,7 @@
 package com.appsdeveloperblog.app.ws;
 
 import com.appsdeveloperblog.app.SpringApplicationContext;
+import com.appsdeveloperblog.app.ws.security.AppProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
@@ -22,6 +23,11 @@ public class MobileAppWsApplication extends SpringBootServletInitializer {
 	@Bean
 	public SpringApplicationContext springApplicationContext(){
 		return new SpringApplicationContext();
+	}
+
+	@Bean(name = "AppProperties")
+	public AppProperties appProperties(){
+		return new AppProperties();
 	}
 
 }
