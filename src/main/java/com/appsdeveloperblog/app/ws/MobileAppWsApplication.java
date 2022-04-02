@@ -1,5 +1,6 @@
 package com.appsdeveloperblog.app.ws;
 
+import com.appsdeveloperblog.app.SpringApplicationContext;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
@@ -17,4 +18,10 @@ public class MobileAppWsApplication extends SpringBootServletInitializer {
 	public BCryptPasswordEncoder bCryptPasswordEncoder(){
 		return new BCryptPasswordEncoder();
 	}
+
+	@Bean
+	public SpringApplicationContext springApplicationContext(){
+		return new SpringApplicationContext();
+	}
+
 }
