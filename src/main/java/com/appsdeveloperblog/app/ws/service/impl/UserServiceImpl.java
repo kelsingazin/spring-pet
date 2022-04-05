@@ -6,6 +6,7 @@ import com.appsdeveloperblog.app.ws.service.UserService;
 import com.appsdeveloperblog.app.ws.shared.Utils;
 import com.appsdeveloperblog.app.ws.shared.dto.UserDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,6 +19,7 @@ import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -26,6 +28,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto createUser(UserDto user) {
+        log.info("User created");
         if (Objects.nonNull(userRepository.findByEmail(user.getEmail())))
             throw new RuntimeException("Email is already taken!");
 
@@ -54,6 +57,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto getUser(String email) {
+        log.info("Specific user retrieved");
         UserEntity userEntity = userRepository.findByEmail(email);
         if (Objects.isNull(userEntity)) throw new UsernameNotFoundException(email);
 
