@@ -6,10 +6,12 @@ import com.appsdeveloperblog.app.ws.io.repository.UserRepository;
 import com.appsdeveloperblog.app.ws.service.UserService;
 import com.appsdeveloperblog.app.ws.shared.Utils;
 import com.appsdeveloperblog.app.ws.shared.dto.UserDto;
-import com.appsdeveloperblog.app.ws.ui.model.response.ErrorMessages;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,6 +19,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -98,15 +101,35 @@ public class UserServiceImpl implements UserService {
         log.info("User with userId {} was deleted", userId);
     }
 
-    private UserEntity getUserEntityByUserId(String userId) throws UserServiceException{
+    private UserEntity getUserEntityByUserId(String userId) throws UserServiceException {
         UserEntity userEntity = userRepository.findByUserId(userId);
-        if (Objects.isNull(userEntity)) throw new UserServiceException("User with userId: " + userId  + " is not found");
+        if (Objects.isNull(userEntity)) throw new UserServiceException("User with userId: " + userId + " is not found");
         return userEntity;
     }
 
-    private UserEntity getUserEntityByEmail(String email) throws UserServiceException{
+    private UserEntity getUserEntityByEmail(String email) throws UserServiceException {
         UserEntity userEntity = userRepository.findByEmail(email);
-        if (Objects.isNull(userEntity)) throw new UserServiceException("User with email: " + email  + " is not found");
+        if (Objects.isNull(userEntity)) throw new UserServiceException("User with email: " + email + " is not found");
         return userEntity;
+    }
+
+    @Override
+    public List<UserDto> getUsers(int page, int limit) {
+        List<UserDto> returnValue = new ArrayList<>();
+
+        if(page>0) page--;
+
+        Pageable pageableRequest = PageRequest.of(page, limit);
+
+        Page<UserEntity> usersPage = userRepository.findAll(pageableRequest);
+        List<UserEntity> users = usersPage.getContent();
+
+        for (UserEntity userEntity : users) {
+            UserDto userDto = new UserDto();
+            BeanUtils.copyProperties(userEntity, userDto);
+            returnValue.add(userDto);
+        }
+
+        return returnValue;
     }
 }
