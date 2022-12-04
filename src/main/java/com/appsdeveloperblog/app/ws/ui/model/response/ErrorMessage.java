@@ -1,6 +1,9 @@
 package com.appsdeveloperblog.app.ws.ui.model.response;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.Date;
 
@@ -9,6 +12,7 @@ import java.util.Date;
 @Getter
 @Setter
 public class ErrorMessage {
+
     private Date timestamp;
     private String message;
 }

@@ -25,6 +25,7 @@ import java.util.Date;
 
 @RequiredArgsConstructor
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+
     public final AuthenticationManager authenticationManager;
 
     @Override

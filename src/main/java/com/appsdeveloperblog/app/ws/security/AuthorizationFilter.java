@@ -14,7 +14,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import static com.appsdeveloperblog.app.ws.security.SecurityConstants.*;
+import static com.appsdeveloperblog.app.ws.security.SecurityConstants.HEADER_STRING;
+import static com.appsdeveloperblog.app.ws.security.SecurityConstants.TOKEN_PREFIX;
 
 public class AuthorizationFilter extends BasicAuthenticationFilter {
 

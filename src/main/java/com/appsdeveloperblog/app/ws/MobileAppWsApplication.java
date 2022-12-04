@@ -10,24 +10,24 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @SpringBootApplication
 public class MobileAppWsApplication extends SpringBootServletInitializer {
-	
-	public static void main(String[] args) {
-		SpringApplication.run(MobileAppWsApplication.class, args);
-	}
 
-	@Bean
-	public BCryptPasswordEncoder bCryptPasswordEncoder(){
-		return new BCryptPasswordEncoder();
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(MobileAppWsApplication.class, args);
+    }
 
-	@Bean
-	public SpringApplicationContext springApplicationContext(){
-		return new SpringApplicationContext();
-	}
+    @Bean
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
-	@Bean(name = "AppProperties")
-	public AppProperties appProperties(){
-		return new AppProperties();
-	}
+    @Bean
+    public SpringApplicationContext springApplicationContext() {
+        return new SpringApplicationContext();
+    }
+
+    @Bean(name = "AppProperties")
+    public AppProperties appProperties() {
+        return new AppProperties();
+    }
 
 }
