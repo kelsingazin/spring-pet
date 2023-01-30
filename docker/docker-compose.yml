@@ -1,0 +1,19 @@
+version: '3.9'
+services:
+  mysql:
+    platform: linux/x86_64
+    image: mysql:5.7
+    container_name: "mysql-photoapp"
+    volumes:
+      - mysql-photoapp:/var/lib/mysql
+      - "./images/mysql/init:/docker-entrypoint-initdb.d"
+      - "./images/mysql/configuration:/etc/mysql/conf.d"
+    environment:
+      MYSQL_ROOT_PASSWORD: "rootpass"
+    ports:
+      - "${MYSQL_PORT}:3306"
+    expose:
+      - '3326'
+volumes:
+  mysql-photoapp:
+    driver: local
