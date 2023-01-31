@@ -35,23 +35,21 @@ public class UserServiceImpl implements UserService {
     private final ModelMapper modelMapper;
 
     @Override
-    public UserDto createUser(UserDto user) {
+    public UserDto createUser(UserDto userDto) {
         log.info("User created");
-        if (Objects.nonNull(userRepository.findByEmail(user.getEmail())))
+        if (Objects.nonNull(userRepository.findByEmail(userDto.getEmail())))
             throw new RuntimeException("Email is already taken!");
 
-        for (int i = 0; i < user.getAddresses().size(); i++) {
-            AddressDto address = user.getAddresses().get(i);
-            address.setUserDetails(user);
+        for (int i = 0; i < userDto.getAddresses().size(); i++) {
+            AddressDto address = userDto.getAddresses().get(i);
+            address.setUserDetails(userDto);
             address.setAddressId(utils.generateAddressId(30));
-            user.getAddresses().set(i, address);
+            userDto.getAddresses().set(i, address);
         }
 
-        UserEntity userEntity = modelMapper.map(user, UserEntity.class);
-
-        String publicUserId = utils.generateUserId(30);
-        userEntity.setUserId(publicUserId);
-        userEntity.setEncryptedPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        UserEntity userEntity = modelMapper.map(userDto, UserEntity.class);
+        userEntity.setUserId(utils.generateUserId(30));
+        userEntity.setEncryptedPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
 
         UserEntity storedUserDetails = userRepository.save(userEntity);
 
