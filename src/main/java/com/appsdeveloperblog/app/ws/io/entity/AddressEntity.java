@@ -1,5 +1,6 @@
 package com.appsdeveloperblog.app.ws.io.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -43,5 +44,6 @@ public class AddressEntity implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "users_id")
+    @JsonBackReference
     private UserEntity userDetails;
 }

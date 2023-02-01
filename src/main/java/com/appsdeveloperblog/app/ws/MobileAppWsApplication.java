@@ -32,6 +32,8 @@ public class MobileAppWsApplication extends SpringBootServletInitializer {
     }
 
     @Bean
-    public ModelMapper modelMapper(){return new ModelMapper();}
+    public ModelMapper modelMapper() {
+        return new ModelMapper();
+    }
 
 }

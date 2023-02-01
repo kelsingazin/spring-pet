@@ -1,5 +1,6 @@
 package com.appsdeveloperblog.app.ws.io.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -45,5 +46,6 @@ public class UserEntity implements Serializable {
 
     @OneToMany(mappedBy = "userDetails",
             cascade = CascadeType.ALL) //persists Address, when User persisted into DB
+    @JsonManagedReference
     private List<AddressEntity> addresses;
 }
