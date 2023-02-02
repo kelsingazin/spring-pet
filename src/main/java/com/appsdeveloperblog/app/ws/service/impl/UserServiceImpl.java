@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        UserEntity userEntity = getUserEntityByEmail(email);
+        UserEntity userEntity = safelyGetUserEntityByEmail(email);
 
         return new User(userEntity.getEmail(), userEntity.getEncryptedPassword(), new ArrayList<>());
     }
@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto getUser(String email) {
         log.info("Specific user retrieved");
-        UserEntity userEntity = getUserEntityByEmail(email);
+        UserEntity userEntity = safelyGetUserEntityByEmail(email);
 
         UserDto returnValue = new UserDto();
         BeanUtils.copyProperties(userEntity, returnValue);
@@ -76,7 +76,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto getUserByUserId(String userId) {
         UserDto returnValue = new UserDto();
-        UserEntity userEntity = getUserEntityByUserId(userId);
+        UserEntity userEntity = safelyGetUserEntityByUserId(userId);
         BeanUtils.copyProperties(userEntity, returnValue);
         return returnValue;
     }
@@ -85,7 +85,7 @@ public class UserServiceImpl implements UserService {
     public UserDto updateUser(String userId, UserDto user) {
         log.info("UpdateUser method was called!");
         UserDto returnValue = new UserDto();
-        UserEntity userEntity = getUserEntityByUserId(userId);
+        UserEntity userEntity = safelyGetUserEntityByUserId(userId);
 
         userEntity.setFirstName(user.getFirstName());
         userEntity.setLastName(user.getLastName());
@@ -99,21 +99,25 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(String userId) {
         log.info("DeleteUser method was called");
-        UserEntity userEntity = getUserEntityByUserId(userId);
+        UserEntity userEntity = safelyGetUserEntityByUserId(userId);
 
         userRepository.delete(userEntity);
         log.info("User with userId {} was deleted", userId);
     }
 
-    private UserEntity getUserEntityByUserId(String userId) throws UserServiceException {
+    private UserEntity safelyGetUserEntityByUserId(String userId) throws UserServiceException {
         UserEntity userEntity = userRepository.findByUserId(userId);
-        if (Objects.isNull(userEntity)) throw new UserServiceException("User with userId: " + userId + " is not found");
+        if (Objects.isNull(userEntity)) {
+            throw new UserServiceException("User with userId: " + userId + " is not found");
+        }
         return userEntity;
     }
 
-    private UserEntity getUserEntityByEmail(String email) throws UserServiceException {
+    private UserEntity safelyGetUserEntityByEmail(String email) throws UserServiceException {
         UserEntity userEntity = userRepository.findByEmail(email);
-        if (Objects.isNull(userEntity)) throw new UserServiceException("User with email: " + email + " is not found");
+        if (Objects.isNull(userEntity)) {
+            throw new UsernameNotFoundException("User with email: " + email + " is not found");
+        }
         return userEntity;
     }
 
