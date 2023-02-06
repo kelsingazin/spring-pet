@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService {
     public UserDto createUser(UserDto userDto) {
         log.info("User created");
         if (Objects.nonNull(userRepository.findByEmail(userDto.getEmail())))
-            throw new RuntimeException("Email is already taken!");
+            throw new UserServiceException("Email is already taken!");
 
         for (int i = 0; i < userDto.getAddresses().size(); i++) {
             AddressDto address = userDto.getAddresses().get(i);

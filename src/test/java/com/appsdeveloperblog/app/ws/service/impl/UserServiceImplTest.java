@@ -1,5 +1,6 @@
 package com.appsdeveloperblog.app.ws.service.impl;
 
+import com.appsdeveloperblog.app.ws.exceptions.UserServiceException;
 import com.appsdeveloperblog.app.ws.io.entity.AddressEntity;
 import com.appsdeveloperblog.app.ws.io.entity.UserEntity;
 import com.appsdeveloperblog.app.ws.io.repository.UserRepository;
@@ -10,7 +11,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -92,6 +92,24 @@ class UserServiceImplTest {
         verify(utils, times(1)).generateUserId(30);
         verify(bCryptPasswordEncoder, times(1)).encode("pass123123");
         verify(userRepository, times(1)).save(any(UserEntity.class));
+    }
+
+    @Test
+    void createUser_crateUserServiceException() {
+        when(userRepository.findByEmail(anyString())).thenReturn(userEntity);
+
+        UserDto userDto = new UserDto();
+        userDto.setAddresses(getAddresses());
+        userDto.setFirstName("Alinur");
+        userDto.setLastName("Amangazy");
+        userDto.setPassword("pass123123");
+        userDto.setEmail("kiselek.games@gmail.com");
+
+        assertThrows(UserServiceException.class,
+                () -> {
+                    userService.createUser(userDto);
+                }
+        );
     }
 
     private List<AddressDto> getAddresses() {
