@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -37,9 +38,6 @@ class UserServiceImplTest {
 
     @Mock
     BCryptPasswordEncoder bCryptPasswordEncoder;
-
-    @Mock
-    ModelMapper modelMapper;
 
     String userId = "12emlkqewdm";
 
@@ -79,6 +77,8 @@ class UserServiceImplTest {
         userDto.setPassword("pass123123");
         userDto.setEmail("kiselek.games@gmail.com");
 
+        //Do nothing
+//      Mockito.doNothing().when(userRepository).save(any(UserEntity.class));
 
         UserDto storedUserDto = userService.createUser(userDto);
 
