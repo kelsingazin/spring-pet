@@ -18,4 +18,8 @@ public interface UserService extends UserDetailsService {
     UserDto getUserByUserId(String id);
 
     List<UserDto> getUsers(int page, int limit);
+
+    List<UserDto> getUsersWithUnconfirmedEmail(int page, int limit);
+
+    List<UserDto> getUsersByFirstName(String firstName);
 }

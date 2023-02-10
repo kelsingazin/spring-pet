@@ -1,5 +1,6 @@
 package com.appsdeveloperblog.app.ws.shared.dto;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,5 +20,7 @@ public class AddressDto {
     private String streetName;
     private String postalCode;
     private String type;
+
+    @JsonBackReference
     private UserDto userDetails;
 }

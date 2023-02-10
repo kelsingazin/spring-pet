@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final Utils utils;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    //private final ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
     @Override
     public UserDto createUser(UserDto userDto) {
@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService {
             address.setAddressId(utils.generateAddressId(30));
             userDto.getAddresses().set(i, address);
         }
-        ModelMapper modelMapper = new ModelMapper();
+        //ModelMapper modelMapper = new ModelMapper();
         UserEntity userEntity = modelMapper.map(userDto, UserEntity.class);
         userEntity.setUserId(utils.generateUserId(30));
         userEntity.setEncryptedPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
@@ -139,5 +139,31 @@ public class UserServiceImpl implements UserService {
         }
 
         return returnValue;
+    }
+
+    @Override
+    public List<UserDto> getUsersWithUnconfirmedEmail(int page, int limit) {
+        Pageable pageableRequest = PageRequest.of(page, limit);
+        Page<UserEntity> pages = userRepository.findAllUsersWithUnconfirmedEmailAddress(pageableRequest);
+        List<UserEntity> userEntities = pages.getContent();
+
+        List<UserDto> userDtoList = new ArrayList<>();
+
+        for (UserEntity user : userEntities) {
+            userDtoList.add(modelMapper.map(user, UserDto.class));
+        }
+        return userDtoList;
+    }
+
+    @Override
+    public List<UserDto> getUsersByFirstName(String firstName) {
+        List<UserEntity> usersByFirstName = userRepository.findUsersByFirstName(firstName);
+
+        List<UserDto> userDtoList = new ArrayList<>();
+
+        for (UserEntity user : usersByFirstName) {
+            userDtoList.add(modelMapper.map(user, UserDto.class));
+        }
+        return userDtoList;
     }
 }

@@ -1,6 +1,7 @@
 package com.appsdeveloperblog.app.ws.controller;
 
 import com.appsdeveloperblog.app.ws.exceptions.UserServiceException;
+import com.appsdeveloperblog.app.ws.io.repository.UserRepository;
 import com.appsdeveloperblog.app.ws.service.AddressService;
 import com.appsdeveloperblog.app.ws.service.UserService;
 import com.appsdeveloperblog.app.ws.shared.dto.AddressDto;
@@ -24,6 +25,7 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final UserRepository userRepository;
     private final AddressService addressService;
     private final ModelMapper modelMapper;
 
@@ -105,6 +107,37 @@ public class UserController {
         List<UserRest> returnValue = new ArrayList<>();
 
         List<UserDto> userDtoList = userService.getUsers(page, limit);
+
+        for (UserDto userDto : userDtoList) {
+            UserRest userRest = new UserRest();
+            BeanUtils.copyProperties(userDto, userRest);
+            returnValue.add(userRest);
+        }
+
+        return returnValue;
+    }
+
+    @GetMapping(value = "/unconfirmed",
+            produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    public List<UserRest> getUsersWithUnconfirmedEmail(@RequestParam(value = "page", defaultValue = "0") int page,
+                                                       @RequestParam(value = "limit", defaultValue = "25") int limit) {
+        List<UserRest> returnValue = new ArrayList<>();
+        List<UserDto> usersWithUnconfirmedEmail = userService.getUsersWithUnconfirmedEmail(page, limit);
+
+        for (UserDto userDto : usersWithUnconfirmedEmail) {
+            UserRest userRest = new UserRest();
+            BeanUtils.copyProperties(userDto, userRest);
+            returnValue.add(userRest);
+        }
+
+        return returnValue;
+    }
+
+    @GetMapping(value = "/name",
+            produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    public List<UserRest> getUsersByFirstName(@RequestParam String firstName) {
+        List<UserRest> returnValue = new ArrayList<>();
+        List<UserDto> userDtoList = userService.getUsersByFirstName(firstName);
 
         for (UserDto userDto : userDtoList) {
             UserRest userRest = new UserRest();
