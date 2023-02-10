@@ -19,6 +19,7 @@ public interface UserRepository extends PagingAndSortingRepository<UserEntity, L
 
     UserEntity findByUserId(String userId);
 
+    //Native SQL query
     @Query(value = "SELECT * FROM Users u where u.email_verification_status = 'true'",
             countQuery = "SELECT count (*) FROM Users u where u.email_verification_status = 'true'",
             nativeQuery = true)
@@ -41,4 +42,22 @@ public interface UserRepository extends PagingAndSortingRepository<UserEntity, L
     @Query(value = "UPDATE Users u SET u.email_verification_status = :emailVerificationStatus WHERE u.user_id = :userId", nativeQuery = true)
     void updateUserEmailVerificationStatus(@Param("emailVerificationStatus") boolean emailVerificationStatus,
                                            @Param("userId") String userId);
+
+    // JPQL
+
+    @Query("SELECT user from UserEntity user where user.userId = :userId")
+    UserEntity findUserByUserId(@Param("userId") String userId);
+
+    @Query("select user.firstName, user.lastName from UserEntity user where user.userId = :userId")
+    List<Object[]> findUserFullNameById(@Param("userId") String userId);
+
+    @Query(value = "select user.firstName, user.lastName from UserEntity user where user.firstName LIKE %:keyword% or user.lastName LIKE %:keyword%")
+    List<Object[]> findUserFullNameByKeyword(@Param("keyword") String keyword);
+
+    @Transactional
+    @Modifying
+    @Query(value = "UPDATE UserEntity u SET u.emailVerificationStatus = :emailVerificationStatus WHERE u.userId = :userId")
+    void updateUserEntityEmailVerificationStatus(
+            @Param("emailVerificationStatus") boolean emailVerificationStatus,
+            @Param("userId") String userId);
 }

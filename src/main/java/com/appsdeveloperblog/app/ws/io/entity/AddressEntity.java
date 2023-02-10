@@ -11,7 +11,8 @@ import java.io.Serializable;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
-@Entity(name = "address")
+@Entity
+@Table(name = "address")
 @Getter
 @Setter
 @AllArgsConstructor

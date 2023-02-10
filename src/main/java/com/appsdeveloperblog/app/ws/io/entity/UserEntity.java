@@ -9,7 +9,8 @@ import java.util.List;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
-@Entity(name = "users")
+@Entity
+@Table(name = "users")
 @Builder
 @Getter
 @Setter
